@@ -311,7 +311,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = 0
     page.bgcolor = ft.Colors.WHITE
-    page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary="#6366f1", secondary="#8b5cf6", surface=ft.Colors.WHITE, background=ft.Colors.GREY_50))
+    page.theme = ft.Theme(color_scheme=ft.ColorScheme(primary="#6366f1", secondary="#8b5cf6", surface=ft.Colors.WHITE))
     app_state = FlashcardApp()
     DEFAULT_PATH = "flashcards.csv"
 
@@ -657,4 +657,4 @@ def main(page: ft.Page):
     page.go(page.route)
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(main)
