@@ -58,6 +58,7 @@ migrate_chapters.py
 
 # Dati duplicati / formati alternativi
 flashcards_combined.csv
+flashcards.csv
 flashcards_combined.json
 flashcards_combined.md
 
