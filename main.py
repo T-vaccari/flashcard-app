@@ -142,6 +142,10 @@ class FlashcardApp:
             # Fill NaN values in front/back with empty string
             self.df['front'] = self.df['front'].fillna('')
             self.df['back'] = self.df['back'].fillna('')
+            
+            # Unescape literal newlines in front/back
+            self.df['front'] = self.df['front'].astype(str).str.replace(r'\\n', '\n', regex=True)
+            self.df['back'] = self.df['back'].astype(str).str.replace(r'\\n', '\n', regex=True)
 
             # Generate IDs if missing
             if self.df['id'].isnull().any():
@@ -450,11 +454,31 @@ def main(page: ft.Page):
         # -- Controls --
         progress = ft.ProgressBar(value=0, color="#6366f1", bgcolor="#e5e7eb")
         
-        txt_front = ft.Text("", size=24, text_align="center", color="black")
-        txt_back = ft.Text("", size=24, text_align="center", color="black")
+        # Use Markdown instead of Text for rich rendering and LaTeX support
+        txt_front = ft.Markdown(
+            "", 
+            selectable=True,
+            extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
+            on_tap_link=lambda e: page.launch_url(e.data)
+        )
+        txt_back = ft.Markdown(
+            "", 
+            selectable=True,
+            extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
+            on_tap_link=lambda e: page.launch_url(e.data)
+        )
         lbl_card_type = ft.Text("QUESTION", size=12, weight="bold", color="#6366f1")
         
-        card_inner = ft.Container(content=txt_front, alignment=ft.alignment.center, padding=20)
+        # We need a scrollable container for long markdown content
+        card_scroll = ft.Column(
+            [txt_front], 
+            scroll=ft.ScrollMode.AUTO, 
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            expand=True
+        )
+
+        card_inner = ft.Container(content=card_scroll, alignment=ft.alignment.center, padding=20)
         card_container = ft.Container(
             content=card_inner, width=700, height=350, bgcolor="white", border_radius=20,
             border=ft.border.all(1, "#e2e8f0"),
@@ -495,12 +519,13 @@ def main(page: ft.Page):
             
             # Flip State
             if is_flipped:
-                card_inner.content = txt_back
+                # Swap content in the scroll view
+                card_scroll.controls = [txt_back]
                 card_container.bgcolor = "#f8fafc" # slight grey
                 lbl_card_type.value = "ANSWER"
                 controls_col.visible = True
             else:
-                card_inner.content = txt_front
+                card_scroll.controls = [txt_front]
                 card_container.bgcolor = "white"
                 lbl_card_type.value = "QUESTION"
                 controls_col.visible = False
