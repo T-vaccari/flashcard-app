@@ -71,14 +71,47 @@ pip install -r requirements.txt
 flet run main.py
 ```
 
-## 🌐 Web Version
+## 🌐 Web Version Guide
 
-You can run the app in your browser:
+This project maintains two distinct versions on separate branches. Choose the one that fits your needs:
 
-```bash
-flet run main.py --web
-```
+### 1. Main Branch (Flet - Python Only)
+This is the lightweight version using Python and Flet.
 
+**Steps:**
+1. Switch to the main branch: `git checkout main`
+2. Run the web server:
+   ```bash
+   flet run main.py --web
+   ```
+3. Open the provided URL (e.g., `http://127.0.0.1:8550`) in your browser.
+
+**Note:** `flashcards.csv` is not tracked by git, so your study progress is local to your machine.
+
+---
+
+### 2. v2-web Branch (React + Python)
+This version uses a React frontend for an enhanced web experience.
+
+**Prerequisites:**
+- **Node.js**: [Download here](https://nodejs.org/)
+- **Python 3.10+**
+
+**Steps:**
+1. Switch to the web branch: `git checkout v2-web`
+2. **Frontend Setup:**
+   ```bash
+   cd frontend
+   npm install        # Install Node dependencies
+   npm run dev        # Start the React development server
+   ```
+3. **Backend Setup:** (Open a new terminal)
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   python main.py
+   ```
+4. Access the app via the URL shown in the frontend terminal (usually `http://localhost:5173`).
 ---
 
 *Built with [Claude Code](https://claude.ai)*
