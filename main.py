@@ -656,7 +656,7 @@ def main(page: ft.Page):
     page.on_view_pop = view_pop
     
     # Initialize the app by pushing the initial route
-    page.push_route(page.route)
+    page.go(page.route)
 
 if __name__ == "__main__":
     ft.app(main)
